@@ -8,4 +8,4 @@ jobs:
       - name: Call CircleCI
         uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
         env:
-          CC_TOKEN: $
+          CCI_TOKEN: $
