@@ -1,0 +1,39 @@
+version: 2.1
+parameters:
+  GHA_Event:
+    type: string
+    default: ""
+  GHA_Actor:
+    type: string
+    default: ""
+  GHA_Action:
+    type: string
+    default: ""
+  GHA_Meta:
+    type: string
+    default: ""
+
+commands:
+  setup:
+    description: 'Set up the environment'
+    steps:
+      - run: echo "Setup on progress"
+
+jobs:
+  PRCloseOrMerge:
+    docker:
+      - image: cimg/node:12.22
+    environment:
+      CIRCLE_EVENT: << pipeline.parameters.GHA_Event >>
+    steps:
+      - setup
+      - run:
+          echo $CIRCLE_EVENT
+
+
+workflows:
+  release:
+    when:
+      equal: [ "release", << pipeline.parameters.GHA_Event >>]
+    jobs:
+      - PRCloseOrMerge
