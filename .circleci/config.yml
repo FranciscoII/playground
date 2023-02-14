@@ -27,11 +27,11 @@ jobs:
     docker:
       - image: cimg/node:12.22
     environment:
-      CIRCLE_EVENT: << pipeline.parameters.GHA_Event >>
+      BRANCH: << pipeline.git.branch >>
     steps:
       - setup
-      - run:
-          echo $CIRCLE_EVENT
+      - run: echo $BRANCH
+      - run: echo ${CIRCLE_BRANCH}
   AnotherJob:
     docker:
       - image: cimg/node:12.22
