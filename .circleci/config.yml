@@ -12,6 +12,9 @@ parameters:
   GHA_Meta:
     type: string
     default: ""
+  destroy_review_app:
+    type: boolean
+    default: false
 
 commands:
   setup:
@@ -29,11 +32,26 @@ jobs:
       - setup
       - run:
           echo $CIRCLE_EVENT
+  AnotherJob:
+    docker:
+      - image: cimg/node:12.22
+    steps:
+      - setup
+      - run:
+          name: Echo GHA_Meta
+          command: echo ${GHA_Meta}
+
 
 
 workflows:
-  release:
-    when:
-      equal: [ "release", << pipeline.parameters.GHA_Event >>]
+  version: 2
+  PRClosedOrMerged:
+    when: << pipeline.parameters.destroy_review_app >>
     jobs:
+      - AnotherJob
       - PRCloseOrMerge
+  OtherWorkflow:
+    when:
+      not: << pipeline.parameters.destroy_review_app >>
+    jobs:
+      - AnotherJob
