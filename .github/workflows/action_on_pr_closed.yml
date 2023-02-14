@@ -6,6 +6,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Call CircleCI
-        uses: CircleCI-Public/trigger-circleci-pipeline-action@v1.0.4
         env:
           CCI_TOKEN: ${{ secrets.CCI_TOKEN }}
+        run: |
+          curl --request POST \
+          --header 'Circle-Token: ${{ secrets.CCI_TOKEN }}' \
+          --header 'content-type: application/json' \
+          --url https://circleci.com/api/v2/project/gh/FranciscoII/playground/pipeline \
+          --data '{
+          "branch": "refs/pull/2/head",
+          "parameters": {
+              "GHA_Actor": "FranciscoII",
+              "GHA_Event": "pull_request",
+              "GHA_Meta": "COM-908",
+              "destroy_review_app": true
+            }
+           }'
